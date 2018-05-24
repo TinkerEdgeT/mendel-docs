@@ -28,7 +28,7 @@ new directory where you'd like it to live, and do the following:
 
 ```
 repo init -u sso://spacepark/manifest -m debian.xml
-repo sync -j$(lscpu |awk '/^CPU\(s\):/ { print $2 }')
+repo sync -j$(nproc)
 ```
 
 After a short wait, you'll be ready to go for making changes to the repository
@@ -50,7 +50,7 @@ finally build the tree:
 
 ```
 mm debootstrap make-bootstrap-tarball
-m -j$(lscpu |awk '/^CPU\(s\):/ { print $2 }')
+m -j$(nproc)
 ```
 
 In about an hour, if the tip of the tree is good, you should have images ready
