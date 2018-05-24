@@ -1,4 +1,4 @@
-# Getting Started with Debian on the i.MX8M (codename Wall-e)
+# Getting Started with Debian on the i.MX8M
 
 ## Checking out the repository
 
@@ -72,7 +72,7 @@ m sdcard
 
 ## Quick Explanation of the Build System
 
-Wall-e's build system is relatively straightforward. It's a selection of split
+The build system is relatively straightforward. It's a selection of split
 out multi-target makefiles defined in the `build/` directory. Each makefile is
 designed to be as standalone as possible so that each can be built individually
 using the `mm` command, or collectively using `m`.
