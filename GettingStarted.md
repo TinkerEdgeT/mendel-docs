@@ -44,9 +44,19 @@ source build/setup.sh
 ```
 
 At this point you'll have a couple of extra functions available to navigate
-around the tree and build things in part or in whole. For now, let's just build
-the whole shebang. First you need to make a debootstrap tarball, and then
-finally build the tree:
+around the tree and build things in part or in whole.
+
+We assume you're running Debian or one of its derivatives and on a relatively
+recent Intel CPU. Before you actually try to build the system, you'll want to
+make sure you have all of the prerequisites installed. Since we assume
+Debian, you can just do the following to install them:
+
+```
+m prereqs
+```
+
+Now that that's out of the way, let's build the whole shebang. First you need
+to make a debootstrap tarball, and then finally build the tree:
 
 ```
 mm debootstrap make-bootstrap-tarball
