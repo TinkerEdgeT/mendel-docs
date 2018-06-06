@@ -27,7 +27,7 @@ Once you've done this, you're actually ready to check out the sources. Make a
 new directory where you'd like it to live, and do the following:
 
 ```
-repo init -u sso://spacepark/manifest -m debian.xml
+repo init -u sso://aiyprojects/manifest -m debian.xml
 repo sync -j$(nproc)
 ```
 
@@ -55,23 +55,22 @@ Debian, you can just do the following to install them:
 m prereqs
 ```
 
-Now that that's out of the way, let's build the whole shebang. First you need
-to make a debootstrap tarball, and then finally build the tree:
-
+Now that you have the prerequisites installed, we can build:
 ```
-mm debootstrap make-bootstrap-tarball
 m -j$(nproc)
 ```
 
-In about an hour, if the tip of the tree is good, you should have images ready
-to flash available in the out/ directory. To get to the tree quickly, use the
-`j` command to "jump" into the product directory, and then use the `flash.sh`
-script to flash everything to an attached board (note: the board will need to be
-in fastboot mode, and everything previously stored on the emmc will be erased).
-
+After this is complete, you should be able to flash the device:
 ```
-j product
+j build
 flash.sh
+```
+
+Most of this build relies on cached versions of a Debian bootstrap.
+To rebuild this, remove any copies of debootstrap.tgz from your cache directory
+and run:
+```
+mm debootstrap make-bootstrap-tarball
 ```
 
 To build the world for an sdcard, build the `sdcard` target:
@@ -158,18 +157,9 @@ will also not be removed when the `clean` target is run. Bear in mind: if you
 update the package list in `build/debootstrap.mk`, you'll need to re-reun `mm
 deboostrap make-debootstrap-tarball` to regenerate this.
 
-#### device/
-Contains i.MX8M Enterprise-specific configuration files, kernel configurations,
-and other device-specific information. Cloned from the AndroidThings repository
-and will likely migrate as time goes on.
-
 #### docs/
 Contains this documentation, as well as other documentation about the build
 system and working in the tree.
-
-#### hardware/
-Contains the kernel and u-boot bootloader source code. These are forks of the
-original AndroidThings source code.
 
 #### imx-firmware/
 Contains the atheros and qualcomm Wifi firmware blobs. Cloned from the
@@ -180,6 +170,9 @@ selections change.
 Contains the Vivante upstream binary drivers for the GPU. These are required to
 get the displays working. Also clonsed from the AndroidThings repository.
 
+#### linux-imx/
+Contains the source code for the Linux kernel.
+
 #### out/
 The ephemeral directory that contains both local host binaries and tools, as
 well as build artifacts and the final images produced. It has a specific
@@ -189,15 +182,12 @@ structure documented elsewhere.
 Debian package sources used to build the packages installed to make the
 distribution more functional for the Enterprise board.
 
-#### prebuilts/
+#### toolchain/
 Contains the prebuilt toolchains to build for an aarch64 target.
 
-#### system/
-Contains AndroidThings tools like bpt, as well as fastboot and other low-level
-tooling for the host and device-side userlands. Currently the only parts we're
-using in the tree are fastboot and bpt. Cloned from the AndroidThings
-repository.
+#### tools/
+Contains miscellaneous tools to support the image. Bpt and img2simg are forked
+from the Android Things tree, and imx-mkimage from NXP.
 
-#### vendor/
-Contains many NXP specific binaries for various peripherals used in the final
-build to get peripherals working.
+#### uboot-imx/
+Contains the u-boot bootloader, with support for i.MX8 devices.
