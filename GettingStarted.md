@@ -27,7 +27,7 @@ Once you've done this, you're actually ready to check out the sources. Make a
 new directory where you'd like it to live, and do the following:
 
 ```
-repo init -u sso://aiyprojects/manifest -m debian.xml
+repo init -u sso://aiyprojects/manifest
 repo sync -j$(nproc)
 ```
 
