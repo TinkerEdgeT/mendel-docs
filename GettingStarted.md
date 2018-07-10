@@ -1,6 +1,6 @@
 # Getting Started with Debian on the i.MX8M
 
-## Checking out the repository
+## Check out the repository
 
 We've stored our code in Gerrit, and like the Android developers before us, we
 use repo to manage the projects in our Gerrit repositories.
@@ -35,7 +35,7 @@ After a short wait, you'll be ready to go for making changes to the repository
 and building images.
 
 
-## Building the Tree
+## Build the tree
 
 To build the tree, first you need to prepare your environment:
 
@@ -60,7 +60,10 @@ Now that you have the prerequisites installed, we can build:
 m -j$(nproc)
 ```
 
-After this is complete, you should be able to flash the device:
+
+## Flash a device
+
+After the above is complete, you should be able to flash the device:
 ```
 j build
 flash.sh
