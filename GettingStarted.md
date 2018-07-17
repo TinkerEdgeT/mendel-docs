@@ -37,6 +37,11 @@ and building images.
 
 ## Build the tree
 
+To isolate the build from your host system, we build using Docker.
+For gLinux users, follow instructions [here](go/installdocker)
+
+For all other users, follow the [official directions](https://docs.docker.com/install)
+
 To build the tree, first you need to prepare your environment:
 
 ```
@@ -46,20 +51,10 @@ source build/setup.sh
 At this point you'll have a couple of extra functions available to navigate
 around the tree and build things in part or in whole.
 
-We assume you're running Debian or one of its derivatives and on a relatively
-recent Intel CPU. Before you actually try to build the system, you'll want to
-make sure you have all of the prerequisites installed. Since we assume
-Debian, you can just do the following to install them:
-
+To build the tree, simply run:
 ```
-m prereqs
+m
 ```
-
-Now that you have the prerequisites installed, we can build:
-```
-m -j$(nproc)
-```
-
 
 ## Flash a device
 
@@ -73,13 +68,31 @@ Most of this build relies on cached versions of a Debian bootstrap.
 To rebuild this, remove any copies of debootstrap.tgz from your cache directory
 and run:
 ```
-mm debootstrap make-bootstrap-tarball
+DEBOOTSTRAP_FETCH_TARBALL=false m docker-bootstrap
+```
+
+Typically, cached versions of the container images will be fetched. 
+To build them from scratch, run the following:
+
+```
+ARM64_BUILDER_FETCH_TARBALL=false DOCKER_FETCH_TARBALL=false m docker-build docker-build-arm64
 ```
 
 To build the world for an sdcard, build the `sdcard` target:
 
 ```
-m sdcard
+m docker-sdcard
+```
+
+It's also possible to build outside of Docker, though differences in your host machine may cause unexpected issues in the build.
+First, install the prerequisite packages on your host system:
+```
+m prereqs
+```
+
+Then, build the tree:
+```
+m -j$(nproc) all
 ```
 
 ## Quick Explanation of the Build System
