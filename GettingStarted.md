@@ -38,7 +38,7 @@ and building images.
 ## Build the tree
 
 To isolate the build from your host system, we build using Docker.
-For gLinux users, follow instructions [here](go/installdocker)
+For gLinux users, follow the [install instructions here](http://go/installdocker).
 
 For all other users, follow the [official directions](https://docs.docker.com/install)
 
