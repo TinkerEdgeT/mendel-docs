@@ -34,7 +34,6 @@ repo sync -j$(nproc)
 After a short wait, you'll be ready to go for making changes to the repository
 and building images.
 
-
 ## Build the tree
 
 To isolate the build from your host system, we build using Docker.
@@ -51,27 +50,53 @@ source build/setup.sh
 At this point you'll have a couple of extra functions available to navigate
 around the tree and build things in part or in whole.
 
-To build the tree, simply run:
+The next step is to install the prerequisite packages by running:
+
 ```
-m
+m prereqs
+```
+
+Now you can build the tree by running:
+
+```
+m -j$(nproc)
+```
+
+## Fastboot
+
+You will need to install Fastboot either via the [Android SDK Manager](https://developer.android.com/studio/#downloads) or through your distro's package manager.
+
+Once you have fastboot installed, you'll want to go sudo-less to flash your device by making a new .rules file:
+
+```
+sudo sh -c "echo 'SUBSYSTEM==\"usb\", ATTR{idVendor}==\"0525\", MODE=\"0664\", \
+GROUP=\"plugdev\", TAG+=\"uaccess\"' >> /etc/udev/rules.d/65-android-local.rules"
+sudo udevadm control --reload-rules && udevadm trigger
+```
+
+Now you can check that you can flash your device without root previlages by running:
+
+```
+fastboot devices
 ```
 
 ## Flash a device
 
 After the above is complete, you should be able to flash the device:
+
 ```
-j build
 flash.sh
 ```
 
 Most of this build relies on cached versions of a Debian bootstrap.
 To rebuild this, remove any copies of debootstrap.tgz from your cache directory
 and run:
+
 ```
 DEBOOTSTRAP_FETCH_TARBALL=false m docker-bootstrap
 ```
 
-Typically, cached versions of the container images will be fetched. 
+Typically, cached versions of the container images will be fetched.
 To build them from scratch, run the following:
 
 ```
@@ -84,15 +109,10 @@ To build the world for an sdcard, build the `sdcard` target:
 m docker-sdcard
 ```
 
-It's also possible to build outside of Docker, though differences in your host machine may cause unexpected issues in the build.
-First, install the prerequisite packages on your host system:
-```
-m prereqs
-```
+If the device was flashed properly you should be able to login to it:
 
-Then, build the tree:
 ```
-m -j$(nproc) all
+shell.sh
 ```
 
 ## Quick Explanation of the Build System
