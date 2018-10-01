@@ -1,4 +1,4 @@
-# Getting Started with Debian on the i.MX8M
+# Getting Started with Mendel Linux
 
 ## Check out the repository
 
