@@ -37,6 +37,7 @@ and building images.
 ## Build the tree
 
 To isolate the build from your host system, we build using Docker.
+We recommend configuring Docker so that a non-root user can use it.
 For gLinux users, follow the [install instructions here](http://go/installdocker).
 
 For all other users, follow the [official directions](https://docs.docker.com/install)
