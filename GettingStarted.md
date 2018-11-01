@@ -60,8 +60,31 @@ m prereqs
 Now you can build the tree by running:
 
 ```
-m -j$(nproc)
+m
 ```
+
+If you have not modified any packages, and would like to speed your install:
+```
+FETCH_PACKAGES=true m
+```
+This will cause packages to be fetched from Aptitude.
+
+## Artifact caching
+
+There are a few build artifacts that generally don't change, and can be cached to provide a build speedup.
+
+### cache/base.tgz
+- Filesystem tarball for pbuilder. Set FETCH_PBUILDER_DIRECTORY in your environment to the folder containing a copy
+of the file to use an already built version.
+
+### rootdir_ARCH.raw.img
+- Base filesystem tarball made by multistrap. Set ROOTFS_RAW_CACHE_DIRECTORY in your environment to the folder containing a copy
+of the file to use an already built version.
+
+### cache/aiy-board-builder.dar
+- Docker container that the build happens in. Set PREBUILT_DOCKER_ROOT in your environment to the folder containing a copy
+of the file to use an already built version.
+
 
 ## Fastboot
 
@@ -87,21 +110,6 @@ After the above is complete, you should be able to flash the device:
 
 ```
 flash.sh
-```
-
-Most of this build relies on cached versions of a Debian bootstrap.
-To rebuild this, remove any copies of debootstrap.tgz from your cache directory
-and run:
-
-```
-DEBOOTSTRAP_FETCH_TARBALL=false m docker-bootstrap
-```
-
-Typically, cached versions of the container images will be fetched.
-To build them from scratch, run the following:
-
-```
-ARM64_BUILDER_FETCH_TARBALL=false DOCKER_FETCH_TARBALL=false m docker-build docker-build-arm64
 ```
 
 To build the world for an sdcard, build the `sdcard` target:
@@ -203,10 +211,6 @@ Contains the atheros and qualcomm Wifi firmware blobs. Cloned from the
 AndroidThings repository and will likely migrate out as time goes on and bom
 selections change.
 
-#### imx-gpu-viv/
-Contains the Vivante upstream binary drivers for the GPU. These are required to
-get the displays working. Also clonsed from the AndroidThings repository.
-
 #### linux-imx/
 Contains the source code for the Linux kernel.
 
@@ -218,9 +222,6 @@ structure documented elsewhere.
 #### packages/
 Debian package sources used to build the packages installed to make the
 distribution more functional for the Enterprise board.
-
-#### toolchain/
-Contains the prebuilt toolchains to build for an aarch64 target.
 
 #### tools/
 Contains miscellaneous tools to support the image. Bpt and img2simg are forked
