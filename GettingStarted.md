@@ -63,6 +63,8 @@ Now you can build the tree by running:
 m
 ```
 
+The first time you'll be asked to set a pbuilder mirror site. Use http://deb.debian.org/debian.
+
 If you have not modified any packages, and would like to speed your install:
 ```
 FETCH_PACKAGES=true m
