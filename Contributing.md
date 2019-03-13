@@ -17,8 +17,20 @@ again.
 
 ## Code reviews
 
-All submissions, including submissions by project members, require review. We
-use Gerrit for this purpose.
+Mendel is developed publicly, entirely in the open, but all submissions --
+including submissions by project members -- require review. We use Gerrit for
+this purpose to help maintain releases for various boards that Mendel runs on.
+Our [public Gerrit instance](https://coral-review.googlesource.com/) is
+available at https://coral-review.googlesource.com/.
+
+## Contact Points and Discussion Areas
+
+The Mendel Linux team hang out in IRC in the
+[#mendel-linux](ircs://irc.oftc.net:6697/#mendel-linux) channel on
+[oftc.net](https://webchat.oftc.net/).
+
+Bug reports and patches are welcome via our public support email address at
+"Coral" <coral-support@google.com>.
 
 ## Community Guidelines
 

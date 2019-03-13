@@ -3,7 +3,7 @@
 ## Check out the repository
 
 We've stored our code in Gerrit, and like the Android developers before us, we
-use repo to manage the projects in our Gerrit repositories.
+use `repo` to manage the projects in our Gerrit repositories.
 
 To get started, first, you're going to need to pull down a copy of the `repo`
 tool from our public facing sites and add it to your path:
@@ -24,23 +24,77 @@ git config --global user.email "you@example.com"
 ```
 
 Once you've done this, you're actually ready to check out the sources. Make a
-new directory where you'd like it to live, and do the following:
+new directory where you'd like it to live. Depending on which board you will be
+building for determines which manifest you need in your init. Each XML file is
+named after the board's codename.
+
+Our default board type is the Coral Dev Board, also known by the codename
+`enterprise`, which is chosen by specifying the `enterprise.xml` manifest file.
 
 ```
-repo init -u sso://aiyprojects/manifest -g default,imx
+repo init -u sso://aiyprojects/manifest -m enterprise.xml
 repo sync -j$(nproc)
 ```
+
+A current list of boards that are supported is available in the [manifest
+project](https://aiyprojects.googlesource.com/manifest/+/refs/heads/master),
+listed by codename.
+
+Note that some boards require specific groups to be enabled to pull down the
+correct packages. Contact the authors for more information on what groups are
+needed for your specific board and situation.
 
 After a short wait, you'll be ready to go for making changes to the repository
 and building images.
 
+## Prepare your build environment
+
+### Supported Operating Systems
+
+Currently the Mendel Linux build system assumes that you are building on a
+Debian-based system that uses `apt-get` as the primary packaging tool. Building
+on other platforms may be possible, but is currently unsupported.
+
+### Docker
+
+Further, to isolate the build from the host system, we build our packages using
+pbuilder inside of Docker. We recommend configuring Docker so that the user that
+you normally use can use it. You can find out how to install Docker on your
+machine by following [Docker's official installation instructions for Docker
+CE](https://docs.docker.com/install/).
+
+Googlers have specific security requirements on internal workstations and must
+follow the [install instructions here](http://go/installdocker).
+
+### Fastboot
+
+Mendel boards typically use the `fastboot` protocol for flashing boards, much
+like an Android device. Once you've built, you will need to install `fastboot`
+either via the [Android SDK
+Manager](https://developer.android.com/studio/#downloads) or through your
+operating system's package manager.
+
+Once you have `fastboot` installed, you'll want to go sudo-less to flash your
+device by making a new udev rules file:
+
+```
+sudo sh -c "echo 'SUBSYSTEM==\"usb\", ATTR{idVendor}==\"0525\", MODE=\"0664\", \
+GROUP=\"plugdev\", TAG+=\"uaccess\"' >> /etc/udev/rules.d/65-android-local.rules"
+sudo udevadm control --reload-rules && udevadm trigger
+```
+
+In some rare cases, it you may need a reboot to ensure udev is appropriately
+reloaded with the new rule. Now you can check that you can use `fastboot` without
+root privileges by running the following with a fastboot-compatible device
+connected:
+
+```
+fastboot devices
+```
+
+If you see output from the tool, you know it's working fine.
+
 ## Build the tree
-
-To isolate the build from your host system, we build using Docker.
-We recommend configuring Docker so that a non-root user can use it.
-For gLinux users, follow the [install instructions here](http://go/installdocker).
-
-For all other users, follow the [official directions](https://docs.docker.com/install)
 
 To build the tree, first you need to prepare your environment:
 
@@ -49,7 +103,19 @@ source build/setup.sh
 ```
 
 At this point you'll have a couple of extra functions available to navigate
-around the tree and build things in part or in whole.
+around the tree and build things in part or in whole. See below for more
+information, or simply [read the source
+here](https://aiyprojects.googlesource.com/build/+/refs/heads/master/setup.sh).
+
+Currently the build system is configured to make use of Google's internal
+continuous build system to speed up the build. Unfortunately, these tools are
+not available publicly. This will likely change in the future, but for now,
+you'll want to disable the use of this functionality by setting the following
+environment variables:
+
+```
+export IS_EXTERNAL=true
+```
 
 The next step is to install the prerequisite packages by running:
 
@@ -63,48 +129,36 @@ Now you can build the tree by running:
 m
 ```
 
-The first time you'll be asked to set a pbuilder mirror site. Use http://deb.debian.org/debian.
+The first time you'll be asked to set a pbuilder mirror site. Use
+http://deb.debian.org/debian.
 
 If you have not modified any packages, and would like to speed your install:
+
 ```
 FETCH_PACKAGES=true m
 ```
+
 This will cause packages to be fetched from Aptitude.
 
 ## Artifact caching
 
-There are a few build artifacts that generally don't change, and can be cached to provide a build speedup.
+There are a few build artifacts that generally don't change, and can be cached
+to provide a build speedup.
 
-### cache/base.tgz
-- Filesystem tarball for pbuilder. Set FETCH_PBUILDER_DIRECTORY in your environment to the folder containing a copy
-of the file to use an already built version.
+#### cache/base.tgz
+Filesystem tarball for pbuilder. Set `FETCH_PBUILDER_DIRECTORY` in your
+environment to the folder containing a copy of the file to use an already built
+version.
 
-### rootdir_ARCH.raw.img
-- Base filesystem tarball made by multistrap. Set ROOTFS_RAW_CACHE_DIRECTORY in your environment to the folder containing a copy
-of the file to use an already built version.
+#### rootdir_ARCH.raw.img
+Base filesystem tarball made by multistrap. Set `ROOTFS_RAW_CACHE_DIRECTORY` in
+your environment to the folder containing a copy of the file to use an already
+built version.
 
-### cache/aiy-board-builder.dar
-- Docker container that the build happens in. Set PREBUILT_DOCKER_ROOT in your environment to the folder containing a copy
-of the file to use an already built version.
-
-
-## Fastboot
-
-You will need to install Fastboot either via the [Android SDK Manager](https://developer.android.com/studio/#downloads) or through your distro's package manager.
-
-Once you have fastboot installed, you'll want to go sudo-less to flash your device by making a new .rules file:
-
-```
-sudo sh -c "echo 'SUBSYSTEM==\"usb\", ATTR{idVendor}==\"0525\", MODE=\"0664\", \
-GROUP=\"plugdev\", TAG+=\"uaccess\"' >> /etc/udev/rules.d/65-android-local.rules"
-sudo udevadm control --reload-rules && udevadm trigger
-```
-
-Now you can check that you can flash your device without root previlages by running:
-
-```
-fastboot devices
-```
+#### cache/aiy-board-builder.tar
+Docker container that the build happens in. Set `PREBUILT_DOCKER_ROOT` in your
+environment to the folder containing a copy of the file to use an already built
+version.
 
 ## Flash a device
 
@@ -123,15 +177,13 @@ m docker-sdcard
 If the device was flashed properly you should be able to login to it:
 
 ```
-shell.sh
+mdt shell
 ```
 
 ## Quick Explanation of the Build System
 
 The build system is relatively straightforward. It's a selection of split
-out multi-target makefiles defined in the `build/` directory. Each makefile is
-designed to be as standalone as possible so that each can be built individually
-using the `mm` command, or collectively using `m`.
+out multi-target makefiles defined in the `build/` directory.
 
 Adding modules is also relatively straightforward, assuming a decent
 understanding of GNU Make rules. An example of how to get started is available
@@ -152,32 +204,17 @@ of the form:
 targetname - some short description of your target
 ```
 
-This is actually parsed by the `mm` function to help with tab completion. It's
-relatively robust in the face of spaces, but you must separate your targetname
-with a dash (`-`) from the description, or the completion routine will likely
-break.
-
-If you follow the conventions in the template, `mm` will autocomplete your
-module and it's targets listed in the `targets` make target.
-
 ## Quick Tour of setup.sh Functions
 
 ### m -- Make everything from the toplevel
 
 The `m` function can be called from any directory in the filesystem to build the
-entire tree from the ground up. Effectively the command does a pushd to the root
-of the tree and issues a make command. You can specify any options or targets
-you'd like to build, including the `targets` command to have a look around in
-the build system.
+entire tree from the ground up. You can specify a target to build with the
+command as well, just like you would do with make.
 
-### mm -- Make an individual Module
-
-The `mm` function can, like the `m` function, be called from any directory in
-the filesystem to build an individual module. It has autocompletion functions,
-so simply typing `mm` and then hitting TAB will autocomplete the list of modules
-available. Additionally, if you press TAB again, after you've autocompleted a
-module name, it will autocomplete the list of targets available in that module,
-as returned by the `targets` target.
+Effectively the command does a pushd to the root of the tree and issues a make
+command. You can specify any options or targets you'd like to build, including
+the `targets` command to have a look around in the build system.
 
 ### j -- Jump around the directory tree
 
