@@ -5,7 +5,11 @@
 We've stored our code in Gerrit, and like the Android developers before us, we
 use `repo` to manage the projects in our Gerrit repositories.
 
-To get started, first, you're going to need to pull down a copy of the `repo`
+To get started, first make sure you have a Git login for all our projects
+by going to [googlesource.com/new-password](https://www.googlesource.com/new-password)
+and pasting the provided script into a terminal.
+
+Now you need to pull down a copy of the `repo`
 tool from our public facing sites and add it to your path:
 
 ```
