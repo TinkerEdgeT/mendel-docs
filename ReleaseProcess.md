@@ -1,17 +1,24 @@
 # Release Process
 
-1. Update the packages kokoro job to point to the latest release
-2. Update all or some of the package version numbers
+1. Update all or some of the package version numbers
    - All of the package changelogs need to have the proper release listed in the
      changelog after the package number.
-3. Create the release branch in all projects
-4. Create the release branch in continuous-build
-5. All package repositories we have updated need to have git tags
+2. Create the release branch in all projects
+3. Create the release branch in continuous-build
+   - Add branch=release-$RELEASE for all projects in .gitmodules
+   - git submodule update --remote --init
+   - git add -A; git commit
+   - git push origin HEAD:refs/heads/release-$RELEASE
+4. All package repositories we have updated need to have git tags
    - Format of the tag is the same as the package version in the
      debian/changelog file.
-6. Run the packages kokoro job on beaker
-   - Looks at the beaker branch looking for the latest versions and updates that way
-7. Tag the latest rapture with the beaker tag.
+   - git tag $VERSION remote/release-$RELEASE
+   - If the package has separate sources in another repo, you need to tag the
+     same way in the source repo.
+   - git push --tags remote
+5. Make a new release candidate for the appropriate release
+6. Tag the latest rapture with the $RELEASE tag.
+7. Run the kokoro job for $RELEASE.
 
 Cherry picks:
 1. Commit to master
