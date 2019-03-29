@@ -27,6 +27,9 @@ Cherry picks:
 1. Commit to master
 2. Cherry pick to next branch
 3. All packages we have updated need to have tags
-4. Run the rapid release job on for $current-release
+4. Checkout $current-release in continuous
+5. `git submodule update --remote --init`
+6. Check status, update git submodules, commit
+7. Run the rapid release job on for $current-release
    - Looks at the next branch looking for the latest versions and updates that way
-5. Tag the latest rapture with the next tag.
+8. Tag the latest rapture with the next tag.
