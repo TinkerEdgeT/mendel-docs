@@ -12,18 +12,21 @@
 4. All package repositories we have updated need to have git tags
    - Format of the tag is the same as the package version in the
      debian/changelog file.
-   - git tag $VERSION remote/release-$RELEASE
+   - git tag $VERSION aiy/release-$RELEASE
    - If the package has separate sources in another repo, you need to tag the
      same way in the source repo.
-   - git push --tags remote
+   - git push --tags aiy
 5. Make a new release candidate for the appropriate release
+   - If no proposals exist for the release, create a new Rollup proposal and
+     approve it.
 6. Tag the latest rapture with the $RELEASE tag.
+   - rapture --universe cloud-apt settag mendel-core-unstable spacepark-eng.$RELEASE:true
 7. Run the kokoro job for $RELEASE.
 
 Cherry picks:
 1. Commit to master
 2. Cherry pick to next branch
 3. All packages we have updated need to have tags
-4. Run the packages kokoro job on next
+4. Run the rapid release job on for $current-release
    - Looks at the next branch looking for the latest versions and updates that way
 5. Tag the latest rapture with the next tag.
