@@ -100,7 +100,15 @@ If you see output from the tool, you know it's working fine.
 
 ## Build the tree
 
-To build the tree, first you need to prepare your environment:
+To build the tree, first you need to prepare your environment by installing some
+basic packages on your host. You can install them by doing the following:
+
+```
+apt-get install build-essential qemu-user-static bc
+```
+
+Once that's done (you should only ever need to do this once) you can setup your
+environment by running this:
 
 ```
 source build/setup.sh
@@ -111,22 +119,6 @@ around the tree and build things in part or in whole. See below for more
 information, or simply [read the source
 here](https://aiyprojects.googlesource.com/build/+/refs/heads/master/setup.sh).
 
-Currently the build system is configured to make use of Google's internal
-continuous build system to speed up the build. Unfortunately, these tools are
-not available publicly. This will likely change in the future, but for now,
-you'll want to disable the use of this functionality by setting the following
-environment variables:
-
-```
-export IS_EXTERNAL=true
-```
-
-The next step is to install the prerequisite packages by running:
-
-```
-m prereqs
-```
-
 Now you can build the tree by running:
 
 ```
@@ -136,13 +128,15 @@ m
 The first time you'll be asked to set a pbuilder mirror site. Use
 http://deb.debian.org/debian.
 
-If you have not modified any packages, and would like to speed your install:
+If you have not modified any packages, and would like to speed up your build,
+specify `FETCH_PACKAGES=true` like this:
 
 ```
 FETCH_PACKAGES=true m
 ```
 
-This will cause packages to be fetched from Aptitude.
+This will cause packages to be fetched from the upstream Mendel APT repositories
+instead of building them locally.
 
 ## Artifact caching
 
