@@ -28,21 +28,22 @@ git config --global user.email "you@example.com"
 ```
 
 Once you've done this, you're actually ready to check out the sources. Make a
-new directory where you'd like it to live. Depending on which board you will be
-building for determines which manifest you need in your init. Each XML file is
-named after the board's codename.
-
-Our default board type is the Coral Dev Board, also known by the codename
-`enterprise`, which is chosen by specifying the `enterprise.xml` manifest file.
+new directory where you'd like it to live, and initialize `repo` with the
+current release branch.
 
 ```
-repo init -u sso://aiyprojects/manifest -m enterprise.xml
+repo init -u https://coral.googlesource.com/manifest -b release-chef
 repo sync -j$(nproc)
 ```
 
+The board you target determines which manifest you need to init. Each XML file is
+named after the board's codename. Our default board type is the Coral Dev Board,
+also known by the codename `enterprise` (defined in `enterprise.xml`).
+
 A current list of boards that are supported is available in the [manifest
-project](https://aiyprojects.googlesource.com/manifest/+/refs/heads/master),
-listed by codename.
+project](https://coral.googlesource.com/manifest/+/refs/heads/master),
+listed by codename. To target a non-default manifest, add the `-m` flag to
+`repo init` with the name of the manifest XML file.
 
 Note that some boards require specific groups to be enabled to pull down the
 correct packages. Contact the authors for more information on what groups are
@@ -66,9 +67,6 @@ pbuilder inside of Docker. We recommend configuring Docker so that the user that
 you normally use can use it. You can find out how to install Docker on your
 machine by following [Docker's official installation instructions for Docker
 CE](https://docs.docker.com/install/).
-
-Googlers have specific security requirements on internal workstations and must
-follow the [install instructions here](http://go/installdocker).
 
 ### Fastboot
 
@@ -117,7 +115,7 @@ source build/setup.sh
 At this point you'll have a couple of extra functions available to navigate
 around the tree and build things in part or in whole. See below for more
 information, or simply [read the source
-here](https://aiyprojects.googlesource.com/build/+/refs/heads/master/setup.sh).
+here](https://coral.googlesource.com/build/+/refs/heads/master/setup.sh).
 
 Now you can build the tree by running:
 
