@@ -1,10 +1,15 @@
 # What is Mendel Linux?
 
 Mendel Linux is a lightweight derivative of Debian Linux that runs on a number
-of Coral development boards, including the Coral EdgeTPU.
+of Coral development boards, such as the
+[Dev Board](https://coral.ai/products/dev-board/) and
+[SoM](https://coral.ai/products/som/).
 
 If you're looking to get started with any of the Coral boards, please take a
-look at the [Coral Website](https://coral.withgoogle.com) for more information.
+look at the [Coral doccumentation](https://coral.ai/docs) for more information.
+
+If you want to know what's changed in Mendel, see our
+[release notes](https://coral.googlesource.com/docs/+/refs/heads/master/Releases.md).
 
 If you're looking to get started developing, patching, or building Mendel for
 your own uses, please read our [Getting Started
@@ -34,16 +39,18 @@ it up for delivery to the board via the usual apt repository system.
 To build an image from our tooling for one of our boards, check out [Getting
 Started
 documentation](https://coral.googlesource.com/docs/+/refs/heads/master/GettingStarted.md)
+
 Note: we generally discourage this, as we put a great deal of effort into making
 sure our releases run well on the boards we target. Mendel is a proper Linux
 distribution: we work with packages, not images, and any image should be
 possible to upgrade to the latest release with a simple `apt-get dist-upgrade`
-without requiring a reboot (modulo kernel and bootloader updates, obviously).
+without requiring a reboot (modulo kernel and bootloader updates, obviously,
+which require [reflashing the board](https://coral.ai/docs/dev-board/reflash/)).
 
 ## What do we support?
 
-Mendel currently only supports the Coral EdgeTPU Dev Board (also known as
-enterprise, or phanbell).
+Mendel currently only supports the Coral Dev Board (also known as
+enterprise, or phanbell) and SoM.
 
 For development, our build system only currently supports Linux systems.
 Unfortunately, this is due to various factors out of our control, so it is
