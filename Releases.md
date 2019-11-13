@@ -2,6 +2,8 @@
 
 This is a non-exhaustive summary of changes included in each version of Mendel.
 
+To check your Mendel version, run `cat /etc/mendel_version`.
+
 For system image downloads, see [coral.ai/software](https://coral.ai/software/).
 
 
@@ -15,8 +17,8 @@ For system image downloads, see [coral.ai/software](https://coral.ai/software/).
      new SecureBoot and AppArmor changes do not apply to Mendel)
 +   Support for Python 3.7
 +   Support for OpenCV and OpenCL
++   Support for device tree overlays
 +   Upgraded GStreamer pipelines
-+   Improved stability for memory timing
 +   Upgraded Linux Kernel (4.14)
 +   Upgraded U-Boot bootloader (2017.03.3)
 
