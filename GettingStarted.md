@@ -1,5 +1,7 @@
 # Getting Started with Mendel Linux
 
+## Prerequisites
+
 ## Check out the repository
 
 We've stored our code in Gerrit, and like the Android developers before us, we
@@ -54,11 +56,35 @@ and building images.
 
 ## Prepare your build environment
 
-### Supported Operating Systems
+To build Mendel Linux from source, you will need at least the following:
+
+  - A 64-bit CPU
+  - Kernel 4.15 or newer
+  - binfmt-support 2.1.7 or newer
+
+### Operating Systems
 
 Currently the Mendel Linux build system assumes that you are building on a
 Debian-based system that uses `apt-get` as the primary packaging tool. Building
 on other platforms may be possible, but is currently unsupported.
+
+At the moment, we suggest using Ubuntu 18.10+ or Debian Buster or newer.
+
+Building *can* be done on Ubuntu 18.04, but you will need to run the included
+`build/fix_aarch64_binfmt.sh` script to fix a problem with the qemu-user-static
+package.
+
+### qemu-user-static
+
+Since Mendel is designed to be run on an ARM CPU core, there are occasionally
+times where we can't build things using a cross compiler and instead have to
+emulate the target architecture for a "native" build. To accomplish this, Mendel
+makes heavy use of the `qemu-user-static` system emulator to allow the host
+Linux kernel to run ARM binaries. To install it, simply do this:
+
+```
+$ sudo apt-get install qemu-user-static
+```
 
 ### Docker
 
@@ -66,7 +92,16 @@ Further, to isolate the build from the host system, we build our packages using
 pbuilder inside of Docker. We recommend configuring Docker so that the user that
 you normally use can use it. You can find out how to install Docker on your
 machine by following [Docker's official installation instructions for Docker
-CE](https://docs.docker.com/install/).
+CE](https://docs.docker.com/install/) or, on some variations of Debian and
+Ubuntu, the following will suffice:
+
+```
+$ sudo apt-get install docker.io
+$ sudo adduser $USER docker
+```
+
+Once that's complete, you'll want to logout and login to ensure you're in the
+`docker` group.
 
 ### Fastboot
 
