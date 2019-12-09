@@ -265,6 +265,14 @@ and explore.
 Contains build scripts, the setup.sh script and rootfs overlay, as well as some
 additional tooling.
 
+#### board/
+Contains build scripts to modify the behavior of the build system for the
+specific board you have checked out from source. Essentially, these scripts
+compile the bootloader and kernel, setup the partition map, fstab, flash script
+and also provide the build definitions for the BSP packages.
+
+See also [BoardDefinitions.md](BoardDefinitions.md)
+
 #### cache/
 Contains the debootstrap tarball you must build before starting any other build
 lives here. This directory is ephemeral and doesn't exist on a first clone, but
