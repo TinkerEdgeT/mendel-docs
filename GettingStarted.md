@@ -34,7 +34,7 @@ new directory where you'd like it to live, and initialize `repo` with the
 current release branch.
 
 ```
-repo init -u https://coral.googlesource.com/manifest -b release-day
+repo init -u https://coral.googlesource.com/manifest
 repo sync -j$(nproc)
 ```
 
