@@ -6,6 +6,15 @@ To check your Mendel version, run `cat /etc/mendel_version`.
 
 For system image downloads, see [coral.ai/software](https://coral.ai/software/).
 
+## 5.0 (eagle)
+
++   Upgraded U-Boot bootloader to v2019.04
++   Upgraded Vivante GPU drivers
++   Added support for new 2 GB and 4 GB SoM configurations
++   Separated /home with a partition layout change, so the Home directory is
+     now preserved across system flashes
++   Moved all Mendel packages to a more stable APT repository
+
 
 ## 4.0 (day)
 
