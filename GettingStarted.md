@@ -33,23 +33,34 @@ Once you've done this, you're actually ready to check out the sources. Make a
 new directory where you'd like it to live, and initialize `repo` with the
 current release branch.
 
-```
-repo init -u https://coral.googlesource.com/manifest
-repo sync -j$(nproc)
-```
-
 The board you target determines which manifest you need to init. Each XML file is
-named after the board's codename. Our default board type is the Coral Dev Board,
-also known by the codename `enterprise` (defined in `enterprise.xml`).
-
-A current list of boards that are supported is available in the [manifest
-project](https://coral.googlesource.com/manifest/+/refs/heads/master),
+named after the board's codename. A current list of boards that are supported is
+available in the [manifest project](https://coral.googlesource.com/manifest/+/refs/heads/master),
 listed by codename. To target a non-default manifest, add the `-m` flag to
 `repo init` with the name of the manifest XML file.
+
+For example ,for the Dev Board you use the default:
+
+```
+repo init -u https://coral.googlesource.com/manifest
+```
+
+whereas for the Coral Dev Board Mini, you need to use the following manifest:
+
+```
+repo init -u https://coral.googlesource.com/manifest -m excelsior.xml
+```
 
 Note that some boards require specific groups to be enabled to pull down the
 correct packages. Contact the authors for more information on what groups are
 needed for your specific board and situation.
+
+
+After initializing the repo, you can check out the sources with
+
+```
+repo sync -j$(nproc)
+```
 
 After a short wait, you'll be ready to go for making changes to the repository
 and building images.
